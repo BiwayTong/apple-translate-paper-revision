@@ -1,4 +1,4 @@
 interface:
   display_name: "Google 翻译论文三轮修订"
-  short_description: "用 Google 翻译往返三轮，第三轮用 Humanizer 编辑指定范围内的英文并回填原位"
-  default_prompt: "请用 $google-translate-paper-revision 修订这份稿件，跑完三轮 Google 翻译，在第三轮英文回译后用 Humanizer 编辑指定范围内的英文，交付定稿和过程稿。"
+  short_description: "用谷歌翻译往返三轮，Humanizer 复核指定正文并尽量保留原句"
+  default_prompt: "请用 $google-translate-paper-revision 处理指定正文，跑完三轮谷歌翻译，第三轮英文回译后用 Humanizer 复核。尽量保留我的原句，只做必要修改，另存定稿和过程稿。"

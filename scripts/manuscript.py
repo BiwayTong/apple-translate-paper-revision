@@ -7,6 +7,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import tempfile
 from zipfile import ZipFile
 
@@ -91,6 +92,7 @@ def word_blocks(root):
 class Manuscript:
     def __init__(self, path):
         self.path = path
+        self.changed = False
         self.kind = path.suffix.lower()
         self.fingerprint = hashlib.sha256(path.read_bytes()).hexdigest()
         if self.kind == ".docx":
@@ -125,6 +127,7 @@ class Manuscript:
         check(original.strip() == span["text"], "Source text differs")
         if edited == span["text"]:
             return
+        self.changed = True
         start = len(original) - len(original.lstrip())
         end = len(original.rstrip())
         new = original[:start] + edited + original[end:]
@@ -143,7 +146,13 @@ class Manuscript:
         check(path.suffix.lower() == self.kind, "Choose the same extension as the source")
         with tempfile.TemporaryDirectory(dir=path.parent) as folder:
             staged = Path(folder)/"verified"
-            if self.kind == ".txt":
+            if not self.changed:
+                shutil.copyfile(self.path, staged)
+                check(hashlib.sha256(staged.read_bytes()).hexdigest() == self.fingerprint, "The source file has changed")
+                if self.kind == ".docx":
+                    with ZipFile(staged) as out:
+                        check(out.testzip() is None, "Invalid output archive")
+            elif self.kind == ".txt":
                 staged.write_bytes("".join(self.lines).encode(self.encoding))
             else:
                 from lxml import etree as ET
