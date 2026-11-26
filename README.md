@@ -2,6 +2,8 @@
 
 把英文 Word 论文、UTF-8 文本或一段粘贴的正文交给 Codex，就能按全文、指定章节或段落运行三轮中英文往返修订。稿件可以直接使用，无需标色或检测报告。
 
+想用 Google 翻译完成相同的三轮流程，可以安装 [Google 翻译版（google-translate 分支）](https://github.com/BiwayTong/apple-translate-paper-revision/tree/google-translate)。支持 Google Cloud Translation API 和 Google 翻译网页，两种渠道都会保留原始译文。
+
 如果你有 Turnitin 报告，希望只修订标蓝的句子，请使用同一仓库的 [蓝色高亮版（turnitin-highlights 分支）](https://github.com/BiwayTong/apple-translate-paper-revision/tree/turnitin-highlights)。
 
 ## 安装与使用
