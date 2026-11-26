@@ -2,6 +2,8 @@
 
 给 Codex 一份英文 Word、UTF-8 文本或粘贴的段落，指定全文或章节，即可用 Google 翻译连续做三轮英中往返修订。每轮先将英文译成中文，调整中文表达，再译回英文。下一轮从刚校正的英文开始。最终交付另存的稿件、每轮四份过程稿、重点段落对照、修改记录与词数。
 
+第三轮 Google 翻译的英文回译保存后，Codex 使用内置的 Humanizer 3.1.0 编辑指定范围内的英文。原始回译和编辑稿分别保留，便于对照作者语气、数据和引用。[Humanizer 上游项目](https://github.com/blader/humanizer) · [随附的 MIT 许可证](references/humanizer/LICENSE)
+
 ## 安装
 
 ```sh

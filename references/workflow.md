@@ -48,6 +48,10 @@ python scripts/google_rounds.py job 1 zh --import-web r1-zh-web.json
 
 中译英将 `zh` 换为 `en`，各轮各方向使用独立文件。部分导入会保存已填段落并列出缺少的编号。导入时程序核对源文、轮次和方向。归档中的 `provider` 用 `google-translate-web` 标记网页译文，用 `google-cloud-translation-v2` 标记 API 返回值。若两种渠道均不可用，交付当前待译表及进度。
 
+### 第三轮英文编辑
+
+第三轮中译英结束后，将原始回译保存在 `job/r3-en-raw.json`。用 Humanizer 编辑所选英文，另存为 `job/r3-en-edit.json`。例如可将 “It is worth noting that the estimate may be 4–6% higher [7].” 简化为 “The estimate may be 4–6% higher [7].”，保留估计范围、限定词和引用。按编号将理由记入 `job/review.md`，与三轮过程稿一起交付。
+
 ## 成稿
 
 ```sh
