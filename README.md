@@ -1,23 +1,24 @@
-# 蓝色高亮三轮修订
+# Turnitin 蓝色高亮修订 · Google 翻译版
 
-这是一个在 Codex 中使用的技能。提供 Turnitin 报告 PDF 和送检时的英文 Word 论文，Codex 会定位蓝色高亮，逐段完成三轮苹果翻译往返，再把定稿写回 Word 副本。如果一段只标蓝了半句，修改范围就只包含那半句。
+附上 Turnitin 报告 PDF 和送检时的英文 Word 原稿，Codex 会按报告页码定位蓝色高亮，只修订选中的字句。三轮英中往返都使用 Google 翻译，每一轮从上一轮校正后的英文继续。定稿回填到 Word 副本，并附上编号摘录、各轮原始译文和调整稿、重点段落对照、修改记录及正文词数。
 
-## 安装
-
-蓝色高亮版在本仓库的 `turnitin-highlights` 分支维护。用下面的命令安装，随后可在技能目录中运行 `git pull --ff-only` 获取该分支的更新。
+## 安装和使用
 
 ```sh
-git clone --branch turnitin-highlights --single-branch https://github.com/BiwayTong/apple-translate-paper-revision.git ~/.codex/skills/turnitin-highlight-revision
+git clone --branch turnitin-highlights-google --single-branch https://github.com/BiwayTong/apple-translate-paper-revision.git ~/.codex/skills/turnitin-highlight-google-revision
 ```
 
-如果设置了 `CODEX_HOME`，请将目标目录换为该目录下的 `skills/turnitin-highlight-revision`。打开新的 Codex 会话即可调用。需要固定版本时，可以使用[首发版 v1.0.0 安装包](https://github.com/BiwayTong/turnitin-highlight-revision/releases/download/v1.0.0/turnitin-highlight-revision.zip)。直接修订普通稿件请看[普通论文版（main 分支）](https://github.com/BiwayTong/apple-translate-paper-revision/tree/main)。
+打开新的 Codex 会话，附上两份文件后输入：
 
-## 使用
+> 用 $turnitin-highlight-google-revision 提取报告里的蓝色高亮，用谷歌翻译跑完三轮，只把标蓝的部分放回 Word，给我定稿和过程包。
 
-附上报告及对应的 Word 文件，然后输入：
+如果只有已经提取的高亮文本，也可以先做三轮修订，取得对应的 Word 底稿后再定位回填。
 
-> 用 $turnitin-highlight-revision 提取报告中的蓝色高亮，跑完三轮苹果翻译，再把修改稿放回论文。
+## 翻译方式
 
-在 Mac 上准备两条使用苹果“翻译文本”动作的快捷指令，分别设置为英译中和中译英。默认示例名称为 `论文英译中` 和 `论文中译英`。PDF 与 Word 工具使用 Python、pdfplumber 和 lxml。无法调用快捷指令时，可以用苹果翻译手动回填并从断点继续。[操作说明](references/operations.md)
+- **Google 翻译网页**可直接使用，无需 API Key。逐段取得原始译文后导入，程序核对编号、源文、轮次和方向。[Google 翻译](https://translate.google.com/)
+- **Google Cloud Translation API** 支持自动调用。使用已启用 Cloud Translation API 的项目，设置环境变量 `GOOGLE_TRANSLATE_API_KEY` 或配置应用默认凭据。计费与配额由所用项目决定。[身份验证](https://cloud.google.com/translate/docs/authentication) · [计费](https://cloud.google.com/translate/pricing)
 
-每轮保留中文原始译文、中文调整稿、英文回译原文和校正后的英文稿。下一轮从上一轮英文稿开始。交付内容包括修订后的 Word、编号摘录、三轮过程稿和修改记录。Turnitin 报告用来确定编辑范围；技能本身不运行检测或预测分数。
+PDF 和 Word 在本地处理。Python 依赖为 `pdfplumber` 和 `lxml`，使用应用默认凭据时另需 `google-auth[requests]`。提取工具支持矩形色带；批注型高亮、扫描件与跨格式的选区可按操作指南逐处定位核对。[操作指南](references/operations.md)
+
+同一仓库也提供[普通稿件 Google 版](https://github.com/BiwayTong/apple-translate-paper-revision/tree/google-translate)、[蓝色高亮苹果翻译版](https://github.com/BiwayTong/apple-translate-paper-revision/tree/turnitin-highlights)和[普通稿件苹果翻译版](https://github.com/BiwayTong/apple-translate-paper-revision/tree/main)。

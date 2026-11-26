@@ -1,6 +1,6 @@
 # 操作与恢复
 
-命令从技能目录运行。`python` 指有相应依赖的 Python；在 Codex 桌面端处理文档可先用工作区依赖加载器定位 Python。`highlights.py` 使用 pdfplumber 与 lxml，`apple_rounds.py` 仅需 Python 标准库和 macOS 快捷指令。每次任务用一个新工作目录，下面以 `job/` 表示。
+从技能目录运行命令。PDF 定位和 Word 回填使用 Python、pdfplumber 和 lxml。先创建独立的任务文件夹（本例为 `job/`）。
 
 ## 从 PDF 定位到 Word
 
@@ -10,9 +10,10 @@
 python scripts/highlights.py inspect report.pdf
 ```
 
-下例参数仅演示一种版面。把页码改成该报告中**论文的全部页面**（包含未标记的参考文献页），把裁切高度和颜色换成实测值。高度以 PDF 点数计，自页面顶部向下。RGB 为 0 至 1 的数值。
+下例参数仅演示一种版面。先创建输出目录，再把页码改成该报告中**论文的全部页面**（包含未标记的参考文献页），把裁切高度和颜色换成实测值。高度以 PDF 点数计，自页面顶部向下。RGB 为 0 至 1 的数值。
 
 ```sh
+mkdir -p job
 python scripts/highlights.py extract report.pdf submitted.docx job/scope.json \
   --pages 3 8 --y 50 790 --rgb 0.3203 0.7773 0.8555
 ```
@@ -21,31 +22,47 @@ python scripts/highlights.py extract report.pdf submitted.docx job/scope.json \
 
 - PDF 高亮为批注时，读取 Highlight 批注的四边形并与字形相交，复用整篇对齐原则。扫描图像用页面渲染识别色带，OCR 仅供定位，以图面和 Word 原句校正。颜色或页眉随页变化时分页面确认。
 - 表格、文本框、多栏、脚注、PDF 特殊字符可能影响阅读顺序。按实际段落或单元格上下文重建对应关系；不通过宽松的全文搜索替换重复短语。保留可核验的原文与位置。
-- 将 `scope.json` 中编号、页码与文字另存为可读摘录。以基准稿创建 `job/baseline.json`，格式为编号映射至完整英文文本的 JSON 对象，例如 `{"P001": "The prototype opens in the courtyard."}`。
+- 先依据 `scope.json` 逐一核对选区。完成内容核查后，把英文基准稿保存为 `job/baseline.json`，例如 `{"P001":"The bridge opened in 2012."}`。每个高亮编号对应一段完整的选中文本。程序在翻译前核对编号，打包时从选区清单读取原始摘录。
+- 如果输入只有编号摘录，可直接建立最小的 `job/scope.json`，例如 `{"spans":[{"id":"P001","text":"The bridge opened in 2012.","pages":[]}]}`。有报告页码时填写实际页码。可以先翻译和打包。回填 Word 前用匹配的原稿核实每个位置，并补齐完整的定位清单和底稿指纹。
 
 ## 每轮的实际调用
 
-在 macOS「快捷指令」检查两条指令确实使用苹果的“翻译文本”动作，分别配置为英文→中文、中文→英文，并能返回翻译文本。在这台 Mac 上通常名为 `论文英译中` 与 `论文中译英`；在别处使用当地实配名称。短文可先用一句已知文本确认方向。
+### 使用 Google Cloud 自动翻译
 
-下面是第一轮。编号在所有文件中保持一致。
+使用已启用 Cloud Translation API 的 Google Cloud 项目。可以在运行进程中设置环境变量 `GOOGLE_TRANSLATE_API_KEY`，或为 Python 安装 `google-auth[requests]` 并配置应用默认凭据（ADC）。使用个人 ADC 时，需要具备相应权限的配额项目，可通过 `GOOGLE_CLOUD_QUOTA_PROJECT` 指定。密钥留在本机的环境变量或密钥管理器中。实际提交给 Google 的是当前选中的片段，费用和配额以所用项目为准。[身份验证](https://cloud.google.com/translate/docs/authentication) · [官方接口](https://cloud.google.com/translate/docs/reference/rest/v2/translate) · [计费](https://cloud.google.com/translate/pricing)
 
 ```sh
-python scripts/apple_rounds.py job 1 zh '论文英译中'
-# 阅读 r1-zh-raw.json，将逐段调整后的中文另存为 job/r1-zh-edit.json。
-python scripts/apple_rounds.py job 1 en '论文中译英'
-# 阅读 r1-en-raw.json，对照保留清单，将本轮英文稿另存为 job/r1-en-edit.json。
+python scripts/google_rounds.py job 1 zh
+# 阅读 r1-zh-raw.json，将中文建议稿或作者修改稿写入 job/r1-zh-edit.json
+python scripts/google_rounds.py job 1 en
+# 阅读 r1-en-raw.json，将核对后的英文写入 job/r1-en-edit.json
 ```
 
-依次用轮次 `2`、`3`重复上述两步。工具会读取上一轮的英文修改稿或本轮的中文调整稿，并校验已完成翻译的输入与原始输出指纹。每次只推进一个翻译方向，逐段保存在 `.records/`；中断后重跑同一条命令可接着处理。不要把原始输出文件当作可改的工作稿。完成第三轮后，最终核对、校对结果另存为 `job/final.json`。
+第二轮和第三轮分别把轮次改为 `2` 和 `3`。英译中的输入是第一轮的基准稿或上一轮英文调整稿，中译英的输入始终是本轮中文调整稿。JSON 调整稿沿用基准稿的全部编号。对于 Google 原样返回的空格、标点或字符实体，保留原始输出，在调整稿中按语境处理。
 
-原样返回的极短专名有时本来就无须翻译。遇到空输出、原样返回或方向不对，先核对快捷指令及该编号的实际返回。确需人工回填时，导出本轮待译输入，保留用户用苹果翻译得到的原始输出，在独立记录中注明方向、编号、来源和输入指纹。后续可用工作台的人工回填功能或按同一顺序人工续跑。只把真正通过快捷指令取得的译文登记为自动调用结果。
+每个成功段落独立记录翻译渠道、语言方向、输入与译文指纹。临时网络错误或限流缓解后重跑当前步骤，程序会从缺失的段落继续。出现 `SERVICE_DISABLED` 时，检查所用项目是否已启用 Cloud Translation API，或继续使用网页方式。遇到长度上限应按句界分段，记录各段位置及原始译文，再按原顺序回填。
+
+### 使用 Google 翻译网页
+
+没有 Cloud 凭据也可完成三轮。每次导出当前步骤的待译表，在 Google 翻译网页设置表内指定的英中方向，逐段提交 `source`，把显示的完整译文原样填入对应的 `translation`。保留编号、轮次、语言和源文。编辑者有网页访问权限时直接操作，否则请用户返回填好的表。每次都要实际取得本轮译文。[打开 Google 翻译](https://translate.google.com/)
+
+```sh
+python scripts/google_rounds.py job 1 zh --export-web r1-zh-web.json
+# 填入网页译文后导入
+python scripts/google_rounds.py job 1 zh --import-web r1-zh-web.json
+```
+
+中译英将 `zh` 换为 `en`，各轮各方向使用独立文件。部分导入会保存已填段落并列出缺少的编号。导入时程序核对源文、轮次和方向。归档中的 `provider` 用 `google-translate-web` 标记网页译文，用 `google-cloud-translation-v2` 标记 API 返回值。若两种渠道均不可用，交付当前待译表及进度。
 
 ## 回填与验证
 
+将最终对照检查稿保存为 `job/check.json`，将最小校对后的定稿保存为 `job/final.json`，两者使用相同的编号。将修改理由、中文稿来源、待核实问题、整篇词数及计入口径写入 `job/review.md`。只有摘录时给出选区词数。
+
 ```sh
 python scripts/highlights.py merge submitted.docx job/scope.json job/final.json revised.docx
+python scripts/package_process.py job process.zip
 ```
 
 输出使用新文件名。工具核实底稿指纹、编号全集和每一处原文，按倒序替换以避免偏移，检查所有其他 Word 部件。常规正文和同一文字节点内的局部选区可直接处理。
 
-若选区跨越斜体、超链接或多个文字节点，按原格式单元在副本中编辑，保留各节点的字符样式、域和链接目标；必要时用 Word 的范围编辑能力处理。遇到有歧义的边界，只回填能确证的部分。最后检查未选文字和结构，将 Word 渲染成页面检查。过程包只打包这次任务的稿件和核对记录。
+若选区跨越斜体、超链接或多个文字节点，按原格式单元在副本中编辑，保留各节点的字符样式、域和链接目标；必要时用 Word 的范围编辑能力处理。遇到有歧义的边界，只回填能确证的部分。最后检查未选文字和结构，将 Word 渲染成页面检查。过程包包含带页码的编号摘录、每轮四份稿件、Google 翻译来源记录、基准稿与定稿对照和修改说明。

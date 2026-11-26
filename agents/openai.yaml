@@ -1,4 +1,4 @@
 interface:
-  display_name: "蓝色高亮三轮修订"
-  short_description: "提取报告中的蓝色原句，用苹果翻译往返三轮，并将定稿回填到对应的 Word 位置"
-  default_prompt: "请用 $turnitin-highlight-revision 提取这份报告的蓝色高亮，跑完三轮苹果翻译，并把修改后的片段放回匹配的 Word 论文。"
+  display_name: "Turnitin 蓝色高亮修订 · Google 翻译"
+  short_description: "提取 Turnitin 蓝色高亮，用谷歌翻译往返三轮，再按选区回填 Word"
+  default_prompt: "请用 $turnitin-highlight-google-revision 提取报告的蓝色高亮，用谷歌翻译跑完三轮，再把定稿放回对应的 Word 位置。"
