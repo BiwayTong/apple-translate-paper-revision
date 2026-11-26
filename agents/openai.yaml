@@ -1,4 +1,4 @@
 interface:
   display_name: "Turnitin 蓝色高亮修订 · Google 翻译"
-  short_description: "用谷歌翻译修订蓝色高亮，第三轮用 Humanizer 编辑英文并回填 Word"
-  default_prompt: "请用 $turnitin-highlight-google-revision 修订报告中的蓝色高亮，跑完三轮谷歌翻译，在第三轮用 Humanizer 保留我的语气，再回填 Word 并交付过程稿。"
+  short_description: "用谷歌翻译往返三轮，Humanizer 复核标蓝片段并尽量保留原句"
+  default_prompt: "请用 $turnitin-highlight-google-revision 处理标蓝片段，跑完三轮谷歌翻译，第三轮英文回译后用 Humanizer 复核。尽量保留我的原句，只做必要修改，另存定稿和过程稿。"

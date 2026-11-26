@@ -2,7 +2,7 @@
 
 附上 Turnitin 报告 PDF 和送检时的英文 Word 原稿，Codex 会按报告页码定位蓝色高亮，只修订选中的字句。三轮英中往返都使用 Google 翻译，每一轮从上一轮校正后的英文继续。定稿回填到 Word 副本，并附上编号摘录、各轮原始译文和调整稿、重点段落对照、修改记录及正文词数。
 
-第三轮英文回译后，Codex 使用随包提供的 Humanizer 3.1.0 编辑高亮片段，参考作者原文删减空泛开场和重复收尾，保留数字、引用和证据强度。过程包可以直接对照 Google 回译原文与编辑后的英文。安装本分支即可使用。[Humanizer 上游项目](https://github.com/blader/humanizer) · [随附的 MIT 许可证](references/humanizer/LICENSE)
+默认尽量保留作者原文。第三轮英文回译后，内置的 Humanizer 3.1.0 复核一次，只修改明确错误、影响理解的歧义或作者指定之处。每轮都可以原样保存译文。回译只带来同义替换时，定稿沿用作者原句。原始译文和编辑稿分别留存。[Humanizer 上游项目](https://github.com/blader/humanizer) · [随附的 MIT 许可证](references/humanizer/LICENSE)
 
 ## 安装和使用
 

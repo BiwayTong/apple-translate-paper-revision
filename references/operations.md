@@ -56,7 +56,7 @@ python scripts/google_rounds.py job 1 zh --import-web r1-zh-web.json
 
 ## 回填与验证
 
-第三轮中译英完成后，保留 `job/r3-en-raw.json` 作为 Google 的原始回译。按主流程在英文编辑稿中使用 Humanizer，输出 `job/r3-en-edit.json`。例如，若草稿是 “It is worth noting that the estimate may be 4–6% higher [7].”，可写成 “The estimate may be 4–6% higher [7].”。变化只涉及开头，估计范围、不确定性和引用都应保留。修改原因记入现有的 `job/review.md`，随过程包一起交付。
+第三轮英文回译原样存入 `job/r3-en-raw.json`，用 Humanizer 复核一次，将结果另存为 `job/r3-en-edit.json`。对照基准稿时，若回译把 “The estimate may rise by 4–6% [7].” 改成 “The estimate will rise by 4–6% [7].”，只将 `will` 改回 `may`。若原句仅换了一种同义说法，最终稿采用作者原句。未发现具体问题时，编辑稿直接沿用回译，在 `job/review.md` 简记复核结果。
 
 将最终对照检查稿保存为 `job/check.json`，将最小校对后的定稿保存为 `job/final.json`，两者使用相同的编号。将修改理由、中文稿来源、待核实问题、整篇词数及计入口径写入 `job/review.md`。只有摘录时给出选区词数。
 
