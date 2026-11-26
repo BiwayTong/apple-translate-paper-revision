@@ -2,7 +2,7 @@
 
 把英文 Word 论文、UTF-8 文本或一段粘贴的正文交给 Codex，就能按全文、指定章节或段落运行三轮中英文往返修订。稿件可以直接使用，无需标色或检测报告。
 
-第三轮苹果翻译的英文回译保存后，Codex 使用内置的 Humanizer 3.1.0 编辑指定范围内的英文。原始回译和编辑稿分别保留，便于对照作者语气、数据和引用。[Humanizer 上游项目](https://github.com/blader/humanizer) · [随附的 MIT 许可证](references/humanizer/LICENSE)
+默认尽量保留作者原文。第三轮英文回译后，内置的 Humanizer 3.1.0 复核一次，只修改明确错误、影响理解的歧义或作者指定之处。每轮都可以原样保存译文。回译只带来同义替换时，定稿沿用作者原句。原始译文和编辑稿分别留存。[Humanizer 上游项目](https://github.com/blader/humanizer) · [随附的 MIT 许可证](references/humanizer/LICENSE)
 
 想用 Google 翻译完成相同的三轮流程，可以安装 [Google 翻译版（google-translate 分支）](https://github.com/BiwayTong/apple-translate-paper-revision/tree/google-translate)。支持 Google Cloud Translation API 和 Google 翻译网页，两种渠道都会保留原始译文。
 
