@@ -1,4 +1,4 @@
 interface:
   display_name: "英文论文三轮修订"
-  short_description: "直接处理 Word、纯文本或粘贴的英文论文，三轮苹果翻译后按原位回填"
-  default_prompt: "请用 $apple-translate-paper-revision 修订这份英文稿，跑完三轮苹果翻译，保留各轮过程稿并另存定稿。"
+  short_description: "用苹果翻译往返三轮，第三轮用 Humanizer 编辑指定范围内的英文并回填原位"
+  default_prompt: "请用 $apple-translate-paper-revision 修订这份稿件，跑完三轮苹果翻译，在第三轮英文回译后用 Humanizer 编辑指定范围内的英文，交付定稿和过程稿。"
