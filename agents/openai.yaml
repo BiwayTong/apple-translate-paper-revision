@@ -1,4 +1,4 @@
 interface:
-  display_name: "英文论文三轮修订"
-  short_description: "直接处理 Word、纯文本或粘贴的英文论文，三轮苹果翻译后按原位回填"
-  default_prompt: "请用 $apple-translate-paper-revision 修订这份英文稿，跑完三轮苹果翻译，保留各轮过程稿并另存定稿。"
+  display_name: "Google 翻译论文三轮修订"
+  short_description: "使用谷歌翻译修订英文 Word 或纯文本论文，保留六次原始译文和定稿"
+  default_prompt: "请用 $google-translate-paper-revision 修订这份英文稿，跑完三轮谷歌翻译，保存过程稿并另存定稿。"

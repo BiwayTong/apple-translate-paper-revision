@@ -1,19 +1,21 @@
-# 英文论文三轮修订
+# Google 翻译论文三轮修订
 
-把英文 Word 论文、UTF-8 文本或一段粘贴的正文交给 Codex，就能按全文、指定章节或段落运行三轮中英文往返修订。稿件可以直接使用，无需标色或检测报告。
+给 Codex 一份英文 Word、UTF-8 文本或粘贴的段落，指定全文或章节，即可用 Google 翻译连续做三轮英中往返修订。每轮先将英文译成中文，调整中文表达，再译回英文。下一轮从刚校正的英文开始。最终交付另存的稿件、每轮四份过程稿、重点段落对照、修改记录与词数。
 
-如果你有 Turnitin 报告，希望只修订标蓝的句子，请使用同一仓库的 [蓝色高亮版（turnitin-highlights 分支）](https://github.com/BiwayTong/apple-translate-paper-revision/tree/turnitin-highlights)。
-
-## 安装与使用
-
-在 Codex 的个人技能目录中新建 `apple-translate-paper-revision` 文件夹，将本仓库的 `SKILL.md`、`agents/`、`references/` 和 `scripts/` 放进去。默认目录为 `~/.codex/skills/`。也可以用 Git 安装：
+## 安装
 
 ```sh
-git clone https://github.com/BiwayTong/apple-translate-paper-revision.git ~/.codex/skills/apple-translate-paper-revision
+git clone --branch google-translate --single-branch https://github.com/BiwayTong/apple-translate-paper-revision.git ~/.codex/skills/google-translate-paper-revision
 ```
 
-打开一个新的 Codex 会话，附上文稿并说明范围，例如：
+打开新的 Codex 会话，附上文稿，例如：
 
-> 用 $apple-translate-paper-revision 只修订这篇论文的 Discussion 章节，跑完三轮，给我 Word 副本和过程稿。
+> 用 $google-translate-paper-revision 修订这篇论文的 Discussion，跑完三轮，给我 Word 副本和过程稿。
 
-每轮先用苹果翻译英译中，编辑中文，再用苹果翻译译回英文并校对；下一轮以上一轮英文稿为输入。最终交付包括定稿、过程稿、重点段落对照、修改记录及词数。自动翻译需要 Mac 上已配置的两个苹果翻译快捷指令，也支持导入用户实际取得的苹果译文。文本工具使用 Python，Word 处理另需 lxml。[操作说明](references/workflow.md)
+## 选择翻译方式
+
+- **自动调用 API**。在 Google Cloud 项目中启用 Cloud Translation API，并设置环境变量 `GOOGLE_TRANSLATE_API_KEY`，或配置应用默认凭据。每个选中段落会发送给 Google，费用按项目的使用量计算。[Google 身份验证](https://cloud.google.com/translate/docs/authentication) · [计费说明](https://cloud.google.com/translate/pricing)
+- **使用 Google 翻译网页**。无需 API Key。Codex 可在能够访问网页时逐段翻译，也可导出带编号的待译表，导入从网页取得的原始译文并续跑。[打开 Google 翻译](https://translate.google.com/)
+- **运行环境**。使用 Python 3，Word 回填另需 `lxml`，使用应用默认凭据另需 `google-auth[requests]`。每次翻译都记录实际来源、轮次和语言方向。[操作与恢复](references/workflow.md)
+
+本仓库也提供[苹果翻译版](https://github.com/BiwayTong/apple-translate-paper-revision/tree/main)和[苹果翻译蓝色高亮版](https://github.com/BiwayTong/apple-translate-paper-revision/tree/turnitin-highlights)。
