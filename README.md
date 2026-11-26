@@ -1,6 +1,8 @@
 # 英文论文三轮翻译修订 · Humanizer 版
 
-这组 Codex 技能适用于整篇英文论文、指定章节或 Turnitin 报告中的蓝色高亮。每轮用选定的工具英译中、核对中文，再译回英文。**第三轮英文回译原样保存后，才用内置的 Humanizer 3.1.0 复核一次。** 能沿用作者原句的地方就沿用。
+这两套 Codex 工具都支持用苹果翻译或 Google 翻译做三轮英中往返，保留每轮原始译文，尽量沿用作者原句。
+
+**本仓库带 Humanizer 3.1.0**，会在第三轮英文回译保存后额外复核一次措辞。想在回译后直接对照原意、只做必要校对，可以选[基础版（不带 Humanizer）](https://github.com/BiwayTong/paper-revision-translation-only)。
 
 ## 选一个版本
 
@@ -57,7 +59,7 @@
 
 交付还包括重点段落对照、必要修改的理由、待核实问题和注明统计口径的正文词数。高亮版另附编号摘录，便于回到报告核对位置。
 
-[各版本发布记录](https://github.com/BiwayTong/apple-translate-paper-revision/releases) · [Humanizer 项目](https://github.com/blader/humanizer) · [随包许可证](references/humanizer/LICENSE) · [三轮翻译基础版](https://github.com/BiwayTong/paper-revision-translation-only)
+[各版本发布记录](https://github.com/BiwayTong/apple-translate-paper-revision/releases) · [Humanizer 项目](https://github.com/blader/humanizer) · [随包许可证](references/humanizer/LICENSE)
 
 <details>
 <summary>用 Git 安装普通论文苹果翻译版</summary>
