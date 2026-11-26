@@ -40,6 +40,10 @@ python scripts/apple_rounds.py job 1 en '论文中译英'
 
 原样返回的极短专名有时本来就无须翻译。遇到空输出、原样返回或方向不对，先核对快捷指令及该编号的实际返回。确需人工回填时，导出本轮待译输入，保留用户用苹果翻译得到的原始输出，在独立记录中注明方向、编号、来源和输入指纹。后续可用工作台的人工回填功能或按同一顺序人工续跑。只把真正通过快捷指令取得的译文登记为自动调用结果。
 
+### 第三轮英文编辑
+
+第三轮中译英结束后，将原始回译保存在 `job/r3-en-raw.json`。用 Humanizer 编辑已确认的高亮或指定摘录，另存为 `job/r3-en-edit.json`。例如可将 “It is worth noting that the estimate may be 4–6% higher [7].” 简化为 “The estimate may be 4–6% higher [7].”，保留估计范围、限定词和引用。按编号将理由记入 `job/review.md`，与三轮过程稿一起交付。
+
 ## 回填与验证
 
 ```sh
