@@ -1,23 +1,21 @@
-# Google 翻译论文三轮修订
+# 普通论文 · Google 翻译 · Humanizer 版
 
-给 Codex 一份英文 Word、UTF-8 文本或粘贴的段落，指定全文或章节，即可用 Google 翻译连续做三轮英中往返修订。每轮先将英文译成中文，调整中文表达，再译回英文。下一轮从刚校正的英文开始。最终交付另存的稿件、每轮四份过程稿、重点段落对照、修改记录与词数。
+附上英文 Word、UTF-8 文本或直接粘贴英文。可以指定全文或选段，使用网页方式时无需 API Key。第三轮英文回译保存后，内置的 Humanizer 3.1.0 只在指定范围内复核一次，保留作者原意、数字和引用。
 
-默认尽量保留作者原文。第三轮英文回译后，内置的 Humanizer 3.1.0 复核一次，只修改明确错误、影响理解的歧义或作者指定之处。每轮都可以原样保存译文。回译只带来同义替换时，定稿沿用作者原句。原始译文和编辑稿分别留存。[Humanizer 上游项目](https://github.com/blader/humanizer) · [随附的 MIT 许可证](references/humanizer/LICENSE)
+[下载本版 ZIP](https://github.com/BiwayTong/apple-translate-paper-revision/releases/latest/download/google-translate-paper-revision.zip) · [四个版本的下载与用法](https://github.com/BiwayTong/apple-translate-paper-revision#选一个版本)
 
-## 安装
+## 安装和使用
+
+1. 解压 ZIP，将 `google-translate-paper-revision` 整个目录放到 `~/.codex/skills/`。如果自定义了 `CODEX_HOME`，则放入该目录下的 `skills/`。
+2. 可直接用 Google 翻译网页。需要自动调用时，在 Google Cloud 项目中启用 Cloud Translation API，并配置 API Key 或应用默认凭据。
+3. 打开新的 Codex 会话，附上稿件或粘贴英文，输入下面的请求。
+
+> 用 $google-translate-paper-revision 用 Google 翻译网页修订我贴出的英文段落，跑完三轮。保留我的措辞，给我最终英文和每轮过程稿。
+
+每轮保存四种过程稿，下一轮承接上一轮英文。第三轮原始回译与 Humanizer 复核稿分别保存。Word 回填需要 Python 和 lxml。使用应用默认凭据时另需 `google-auth[requests]`。 [操作与断点恢复](references/workflow.md) · [Humanizer 许可证](references/humanizer/LICENSE)
+
+如需通过 Git 安装本分支，可运行以下命令。
 
 ```sh
 git clone --branch google-translate --single-branch https://github.com/BiwayTong/apple-translate-paper-revision.git ~/.codex/skills/google-translate-paper-revision
 ```
-
-打开新的 Codex 会话，附上文稿，例如：
-
-> 用 $google-translate-paper-revision 修订这篇论文的 Discussion，跑完三轮，给我 Word 副本和过程稿。
-
-## 选择翻译方式
-
-- **自动调用 API**。在 Google Cloud 项目中启用 Cloud Translation API，并设置环境变量 `GOOGLE_TRANSLATE_API_KEY`，或配置应用默认凭据。每个选中段落会发送给 Google，费用按项目的使用量计算。[Google 身份验证](https://cloud.google.com/translate/docs/authentication) · [计费说明](https://cloud.google.com/translate/pricing)
-- **使用 Google 翻译网页**。无需 API Key。Codex 可在能够访问网页时逐段翻译，也可导出带编号的待译表，导入从网页取得的原始译文并续跑。[打开 Google 翻译](https://translate.google.com/)
-- **运行环境**。使用 Python 3，Word 回填另需 `lxml`，使用应用默认凭据另需 `google-auth[requests]`。每次翻译都记录实际来源、轮次和语言方向。[操作与恢复](references/workflow.md)
-
-本仓库也提供[苹果翻译版](https://github.com/BiwayTong/apple-translate-paper-revision/tree/main)和[苹果翻译蓝色高亮版](https://github.com/BiwayTong/apple-translate-paper-revision/tree/turnitin-highlights)。
