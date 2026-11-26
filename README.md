@@ -2,6 +2,8 @@
 
 把英文 Word 论文、UTF-8 文本或一段粘贴的正文交给 Codex，就能按全文、指定章节或段落运行三轮中英文往返修订。稿件可以直接使用，无需标色或检测报告。
 
+如果你有 Turnitin 报告，希望只修订标蓝的句子，请使用同一仓库的 [蓝色高亮版（turnitin-highlights 分支）](https://github.com/BiwayTong/apple-translate-paper-revision/tree/turnitin-highlights)。
+
 ## 安装与使用
 
 在 Codex 的个人技能目录中新建 `apple-translate-paper-revision` 文件夹，将本仓库的 `SKILL.md`、`agents/`、`references/` 和 `scripts/` 放进去。默认目录为 `~/.codex/skills/`。也可以用 Git 安装：
