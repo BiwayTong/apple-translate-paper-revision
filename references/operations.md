@@ -42,7 +42,7 @@ python scripts/apple_rounds.py job 1 en '论文中译英'
 
 ### 第三轮英文编辑
 
-第三轮中译英结束后，将原始回译保存在 `job/r3-en-raw.json`。用 Humanizer 编辑已确认的高亮或指定摘录，另存为 `job/r3-en-edit.json`。例如可将 “It is worth noting that the estimate may be 4–6% higher [7].” 简化为 “The estimate may be 4–6% higher [7].”，保留估计范围、限定词和引用。按编号将理由记入 `job/review.md`，与三轮过程稿一起交付。
+第三轮英文回译原样存入 `job/r3-en-raw.json`，用 Humanizer 复核一次，将结果另存为 `job/r3-en-edit.json`。对照基准稿时，若回译把 “The estimate may rise by 4–6% [7].” 改成 “The estimate will rise by 4–6% [7].”，只将 `will` 改回 `may`。若原句仅换了一种同义说法，最终稿采用作者原句。未发现具体问题时，编辑稿直接沿用回译，在 `job/review.md` 简记复核结果。
 
 ## 回填与验证
 

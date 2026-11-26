@@ -4,6 +4,7 @@ import copy
 import hashlib
 import json
 import os
+import shutil
 import tempfile
 import unicodedata
 from collections import Counter, defaultdict
@@ -115,6 +116,7 @@ def merge(args):
         root = ET.fromstring(doc.read(PART))
         ps = paragraphs(root)
         previous = None
+        changed = 0
         # Reverse order keeps earlier offsets stable when replacement lengths change.
         for s in sorted(spans, key=lambda h: (h["paragraph"], h["start"]), reverse=True):
             pi, a, b = s["paragraph"], s["start"], s["end"]
@@ -126,6 +128,8 @@ def merge(args):
             nodes = text_nodes(ps[pi])
             before = "".join(n.text or "" for n in nodes)
             require(before[a:b] == s["text"] and b <= len(before), f"Original span differs at {s['id']}")
+            if val == s["text"]:
+                continue
             require(not ps[pi].xpath(".//w:fldChar | .//w:fldSimple | .//w:ins | .//w:del", namespaces=NS),
                     f"{s['id']} intersects a paragraph with fields or tracked changes; use formatting-aware editing")
             cursor = 0
@@ -139,18 +143,25 @@ def merge(args):
             else:
                 raise ValueError(f"{s['id']} spans multiple Word text nodes; preserve their formatting with a run-aware edit")
             require("".join(n.text or "" for n in nodes) == before[:a]+val+before[b:], "Unexpected paragraph edit")
-        payload = ET.tostring(root, encoding="UTF-8", xml_declaration=True, standalone=True)
+            changed += 1
         with tempfile.TemporaryDirectory(dir=args.output.parent) as tmp:
             staged = Path(tmp)/"verified.docx"
-            with ZipFile(staged, "w") as out:
-                for entry in doc.infolist():
-                    out.writestr(copy.copy(entry), payload if entry.filename == PART else doc.read(entry))
-            with ZipFile(staged) as check:
-                require(check.testzip() is None and check.namelist() == doc.namelist(), "Invalid output archive")
-                for name in doc.namelist():
-                    require(check.read(name) == (payload if name == PART else doc.read(name)), f"Unexpected change in {name}")
+            if changed:
+                payload = ET.tostring(root, encoding="UTF-8", xml_declaration=True, standalone=True)
+                with ZipFile(staged, "w") as out:
+                    for entry in doc.infolist():
+                        out.writestr(copy.copy(entry), payload if entry.filename == PART else doc.read(entry))
+                with ZipFile(staged) as check:
+                    require(check.testzip() is None and check.namelist() == doc.namelist(), "Invalid output archive")
+                    for name in doc.namelist():
+                        require(check.read(name) == (payload if name == PART else doc.read(name)), f"Unexpected change in {name}")
+            else:
+                shutil.copyfile(args.word, staged)
+                require(sha(staged) == scope["word_sha256"], "Base Word file changed")
+                with ZipFile(staged) as check:
+                    require(check.testzip() is None, "Invalid output archive")
             os.link(staged, args.output)  # publish only after validation; existing files are never overwritten
-    print(f"{len(spans)} replacements verified")
+    print(f"{changed} of {len(spans)} verified spans changed")
 
 
 def main():
