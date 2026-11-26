@@ -1,19 +1,23 @@
-# 英文论文三轮修订
+# 蓝色高亮三轮修订
 
-把英文 Word 论文、UTF-8 文本或一段粘贴的正文交给 Codex，就能按全文、指定章节或段落运行三轮中英文往返修订。稿件可以直接使用，无需标色或检测报告。
+这是一个在 Codex 中使用的技能。提供 Turnitin 报告 PDF 和送检时的英文 Word 论文，Codex 会定位蓝色高亮，逐段完成三轮苹果翻译往返，再把定稿写回 Word 副本。如果一段只标蓝了半句，修改范围就只包含那半句。
 
-如果你有 Turnitin 报告，希望只修订标蓝的句子，请使用同一仓库的 [蓝色高亮版（turnitin-highlights 分支）](https://github.com/BiwayTong/apple-translate-paper-revision/tree/turnitin-highlights)。
+## 安装
 
-## 安装与使用
-
-在 Codex 的个人技能目录中新建 `apple-translate-paper-revision` 文件夹，将本仓库的 `SKILL.md`、`agents/`、`references/` 和 `scripts/` 放进去。默认目录为 `~/.codex/skills/`。也可以用 Git 安装：
+蓝色高亮版在本仓库的 `turnitin-highlights` 分支维护。用下面的命令安装，随后可在技能目录中运行 `git pull --ff-only` 获取该分支的更新。
 
 ```sh
-git clone https://github.com/BiwayTong/apple-translate-paper-revision.git ~/.codex/skills/apple-translate-paper-revision
+git clone --branch turnitin-highlights --single-branch https://github.com/BiwayTong/apple-translate-paper-revision.git ~/.codex/skills/turnitin-highlight-revision
 ```
 
-打开一个新的 Codex 会话，附上文稿并说明范围，例如：
+如果设置了 `CODEX_HOME`，请将目标目录换为该目录下的 `skills/turnitin-highlight-revision`。打开新的 Codex 会话即可调用。需要固定版本时，可以使用[首发版 v1.0.0 安装包](https://github.com/BiwayTong/turnitin-highlight-revision/releases/download/v1.0.0/turnitin-highlight-revision.zip)。直接修订普通稿件请看[普通论文版（main 分支）](https://github.com/BiwayTong/apple-translate-paper-revision/tree/main)。
 
-> 用 $apple-translate-paper-revision 只修订这篇论文的 Discussion 章节，跑完三轮，给我 Word 副本和过程稿。
+## 使用
 
-每轮先用苹果翻译英译中，编辑中文，再用苹果翻译译回英文并校对；下一轮以上一轮英文稿为输入。最终交付包括定稿、过程稿、重点段落对照、修改记录及词数。自动翻译需要 Mac 上已配置的两个苹果翻译快捷指令，也支持导入用户实际取得的苹果译文。文本工具使用 Python，Word 处理另需 lxml。[操作说明](references/workflow.md)
+附上报告及对应的 Word 文件，然后输入：
+
+> 用 $turnitin-highlight-revision 提取报告中的蓝色高亮，跑完三轮苹果翻译，再把修改稿放回论文。
+
+在 Mac 上准备两条使用苹果“翻译文本”动作的快捷指令，分别设置为英译中和中译英。默认示例名称为 `论文英译中` 和 `论文中译英`。PDF 与 Word 工具使用 Python、pdfplumber 和 lxml。无法调用快捷指令时，可以用苹果翻译手动回填并从断点继续。[操作说明](references/operations.md)
+
+每轮保留中文原始译文、中文调整稿、英文回译原文和校正后的英文稿。下一轮从上一轮英文稿开始。交付内容包括修订后的 Word、编号摘录、三轮过程稿和修改记录。Turnitin 报告用来确定编辑范围；技能本身不运行检测或预测分数。

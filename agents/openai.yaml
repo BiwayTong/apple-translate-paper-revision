@@ -1,4 +1,4 @@
 interface:
-  display_name: "英文论文三轮修订"
-  short_description: "直接处理 Word、纯文本或粘贴的英文论文，三轮苹果翻译后按原位回填"
-  default_prompt: "请用 $apple-translate-paper-revision 修订这份英文稿，跑完三轮苹果翻译，保留各轮过程稿并另存定稿。"
+  display_name: "蓝色高亮三轮修订"
+  short_description: "提取报告中的蓝色原句，用苹果翻译往返三轮，并将定稿回填到对应的 Word 位置"
+  default_prompt: "请用 $turnitin-highlight-revision 提取这份报告的蓝色高亮，跑完三轮苹果翻译，并把修改后的片段放回匹配的 Word 论文。"
